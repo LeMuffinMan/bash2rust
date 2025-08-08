@@ -1,39 +1,115 @@
-use clap::Parser;
+use clap::{Parser, Subcommand};
+
+#[derive(Parser, Debug)]
+#[command(name = "flowstack")]
+#[command(version = "1.0")]
+#[command(about = "bash automation and testing scripts orchestrator")]
 
 //# is an attribute that change the comportement of code, here Parser and Debug 
 //derive is an attribute that asks rust to generate certain trait implementation
-#[derive(Parser, Debug)]
 //This attribute enable to use this programme with --version --help, following what is in the .toml
 #[command(version, about, long_about = None)]
-struct Args
-{
-    //arg could be -g or --gen
-    #[arg(short, long)]
-    name: String,
 
-    //same as before, and we set a default value in case the program is run without -c / --count x 
-    #[arg(short, long, default_value_t = 1)]
-    count: u8,
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand, Debug)]
+enum Commands 
+{
+    Gen
+    {
+        //short for -c or -cpp
+        #[arg(long = "cpp")]
+        c_mode: bool,
+    },
+    Test
+    {
+        //long for --push_swap / --minishell / -cub3d
+        #[arg(long)]
+        minishell: bool,
+        #[arg(long)]
+        pushswap: bool,
+        #[arg(long)]
+        cub3d: bool,
+    },
+    Metrics 
+    {
+        //long for lines / comments / fcts
+        #[arg(long)]
+        lines: bool,
+        fcts: bool,
+        comments: bool,
+    },
+    Checkmake {},
+    Renamebonus {},
+    Readmegen {},
 }
 
 fn main()
 {
-    //#[derive(Debug)] allow us to use the :? to indicate rust to use the the trait Debug to
-    //display and format args
-    // println!("{:?}", args);
+    let cli = Cli::parse();
 
-    //call methode parse defined in the crate Parser, and set with #[derive(Parser)]
-    //Parse extract the argument line sent executing this program
-    let args = Args::parse();
-    //it fills the struct args :
-    //it looks for a short or long name (-n --name) and count (-c --count) to fill fields as a
-    //string and an unsigned int on 8 bits
-
-    //_ is a throwable variable, we could use i if we want to use it later
-    // then we have a range : from the argument[0] until argument[args.count]
-    for _ in 0..args.count
+    match cli.command
     {
-        println!("Hello {}!", args.name);
+        Commands::Gen { c_mode } => 
+        {
+            if c_mode
+            {
+                println!("About to generate C++ project basis");
+            }
+            else
+            {
+                println!("About to generate C project basis");
+            }
+        }
+        Commands::Test { minishell, pushswap, cub3d } =>
+        {
+            if minishell
+            {
+                println!("About to test minishell");
+            }
+            if pushswap
+            {
+                println!("About to test pushswap");
+            }
+            if cub3d
+            {
+                println!("About to test cub3d");
+            }
+            if !minishell && !pushswap && !cub3d
+            {
+                println!("tests available");
+            }
+        }
+        Commands::Metrics { lines, fcts, comments } =>
+        {
+            if lines 
+            {
+                println!("About to count lines in project");
+            }
+            if fcts 
+            {
+                println!("About to count functions in project");
+            }
+            if comments 
+            {
+                println!("About to count comments in project");
+            }
+        }
+        Commands::Checkmake {} =>
+        {
+            println!("About to check the Makefile");
+        }
+        Commands::Renamebonus {} =>
+        {
+            println!("About to setup the bonus folder");
+        }
+        Commands::Readmegen {} =>
+        {
+            println!("About to generate Readme");
+        }
     }
 }
 //this program can be run using : 
