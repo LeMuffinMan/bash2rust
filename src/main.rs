@@ -17,7 +17,7 @@ fn main()
             commands::run_metrics(lines, fcts, comments),
         Commands::Checkmake {} => commands::run_checkmake(),
         Commands::Renamebonus {} => commands::run_renamebonus(),
-        Commands::Readmegen {} => commands::run_readmegen(),
+        Commands::Srcupdate {} => commands::run_srcupdate(),
     }
 }
 

@@ -83,5 +83,7 @@ pub fn run_checkmake()
 pub fn run_renamebonus() {
     let home = env::var("HOME").expect("HOME variable not set");
     let script_path = format!("{}/.local/scripts/rename_bonus.sh", home);
+
+    execute_script("bash", &script_path);
 }
 
