@@ -51,14 +51,13 @@ pub fn run_checkmake()
     //mut because we want to modify it to add the path of our scripts 
     //env::var("PATH") : try to get the PATH variable from env of our program
     //unwrap_or_default : if it does not exist, we return an empty string ""
-    let mut path = env::var("PATH").unwrap_or_default();
+    // let mut path = env::var("PATH").unwrap_or_default();
     let home = env::var("HOME").expect("HOME variable not set");
-    let scripts_path = format!("{}/.local/scripts", home);
+    let scripts_path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
 
     // println!("{:?}", scripts_path);
     let status = Command::new("bash")
-        .arg("-c")
-        .arg("$HOME/.local/scripts/CanIPush42/CanIPush42.sh")
+        .arg(&scripts_path)
         .status();
 
     match status
