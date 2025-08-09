@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
-#[command(name = "flowstack")]
+#[command(name = "bash2rust")]
 #[command(about = "bash automation and testing scripts orchestrator")]
 #[command(version, about, long_about = None)]
 
