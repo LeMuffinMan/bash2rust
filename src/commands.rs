@@ -3,10 +3,23 @@ use std::env;
 
 pub fn run_gen(cpp_mode: bool)
 {
-    if cpp_mode { 
-        println!("About to generate C++ project starter");
+    println!("About to generate C++/C project starter");
+    let home = env::var("HOME").expect("HOME variable not set");
+    let script_path = if cpp_mode {
+        format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py --cpp", home)
     } else {
-        println!("About to generate C project starter");
+        format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py", home)
+    };
+
+    let status = Command::new("python")
+        .arg(&script_path)
+        .status();
+
+    match status
+    {
+        Ok(s) if s.success() => println!("Script executed successfully"),
+        Ok(s) => eprintln!("Script executed but failed with status: {}", s),
+        Err(e) => eprintln!("Failed to execute script: {}", e),
     }
 }
 
@@ -63,7 +76,7 @@ pub fn run_checkmake()
     match status
     {
         Ok(s) if s.success() => println!("Script executed successfully"),
-        Ok(s) => eprintln!("Script exited with status: {}", s),
+        Ok(s) => eprintln!("Script executed but failed with status: {}", s),
         Err(e) => eprintln!("Failed to execute script: {}", e),
     }
 }
