@@ -15,9 +15,16 @@ pub fn execute_script(interpretor: &str, path: &str)
     }
 }
 
+pub fn run_srcupdate()
+{
+    let home = env::var("HOME").expect("HOME variable not set");
+    let script_path = format!("{}/.local/scripts/42cpp-project-starter/scripts/src_updater.sh", home);
+
+    execute_script("bash", &script_path);
+}
+
 pub fn run_gen(cpp_mode: bool)
 {
-    println!("About to generate C++/C project starter");
     let home = env::var("HOME").expect("HOME variable not set");
     let script_path = if cpp_mode {
         format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py --cpp", home)
@@ -30,8 +37,12 @@ pub fn run_gen(cpp_mode: bool)
 
 pub fn run_test(minishell: bool, pushswap: bool, cub3d: bool)
 {
+    //args en plus ? : recipes ?
     if minishell {
-        println!("About to test minishell");
+        let home = env::var("HOME").expect("HOME variable not set");
+        let script_path = format!("{}/.local/scripts/minishell_tester/muffinette.sh", home);
+
+        execute_script("bash", &script_path);
     }
     if pushswap  {
         println!("About to test push_swap");
@@ -69,6 +80,8 @@ pub fn run_checkmake()
     execute_script("bash", &script_path);
 }
 
-pub fn run_renamebonus() {println!("About to setup the bonus folder");}
+pub fn run_renamebonus() {
+    let home = env::var("HOME").expect("HOME variable not set");
+    let script_path = format!("{}/.local/scripts/rename_bonus.sh", home);
+}
 
-pub fn run_readmegen() {println!("About to generate Readme");}

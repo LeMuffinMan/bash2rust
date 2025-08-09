@@ -39,5 +39,5 @@ pub enum Commands
     }, 
     Checkmake {},
     Renamebonus {},
-    Readmegen {},
+    Srcupdate {},
 }
