@@ -1,6 +1,20 @@
 use std::process::Command;
 use std::env;
 
+pub fn execute_script(interpretor: &str, path: &str)
+{
+    let status = Command::new(interpretor)
+        .arg(&path)
+        .status();
+
+    match status
+    {
+        Ok(s) if s.success() => println!("Script executed successfully"),
+        Ok(s) => eprintln!("Script executed but failed with status: {}", s),
+        Err(e) => eprintln!("Failed to execute script: {}", e),
+    }
+}
+
 pub fn run_gen(cpp_mode: bool)
 {
     println!("About to generate C++/C project starter");
@@ -11,16 +25,7 @@ pub fn run_gen(cpp_mode: bool)
         format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py", home)
     };
 
-    let status = Command::new("python")
-        .arg(&script_path)
-        .status();
-
-    match status
-    {
-        Ok(s) if s.success() => println!("Script executed successfully"),
-        Ok(s) => eprintln!("Script executed but failed with status: {}", s),
-        Err(e) => eprintln!("Failed to execute script: {}", e),
-    }
+    execute_script("python", &script_path);
 }
 
 pub fn run_test(minishell: bool, pushswap: bool, cub3d: bool)
@@ -56,29 +61,12 @@ pub fn run_metrics(lines: bool, fcts: bool, comments: bool) {
 
 pub fn run_checkmake()
 {
-    //We want to execute the script CanIPush42.sh which depend of the utils.sh script at the same
-    //path
-    //BUT we want to execute CanIPush42.sh from anywhere on the system
     println!("About to check the Makefile");
 
-    //mut because we want to modify it to add the path of our scripts 
-    //env::var("PATH") : try to get the PATH variable from env of our program
-    //unwrap_or_default : if it does not exist, we return an empty string ""
-    // let mut path = env::var("PATH").unwrap_or_default();
     let home = env::var("HOME").expect("HOME variable not set");
-    let scripts_path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
+    let script_path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
 
-    // println!("{:?}", scripts_path);
-    let status = Command::new("bash")
-        .arg(&scripts_path)
-        .status();
-
-    match status
-    {
-        Ok(s) if s.success() => println!("Script executed successfully"),
-        Ok(s) => eprintln!("Script executed but failed with status: {}", s),
-        Err(e) => eprintln!("Failed to execute script: {}", e),
-    }
+    execute_script("bash", &script_path);
 }
 
 pub fn run_renamebonus() {println!("About to setup the bonus folder");}
