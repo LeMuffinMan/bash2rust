@@ -15,7 +15,7 @@ fn main()
             commands::run_test(minishell, pushswap, cub3d),
         Commands::Metrics { lines, fcts, comments } =>
             commands::run_metrics(lines, fcts, comments),
-        Commands::Checkmake {} => commands::run_checkmake(),
+        Commands::Checkmake { cpp_mode } => commands::run_checkmake(cpp_mode),
         Commands::Renamebonus {} => commands::run_renamebonus(),
         Commands::Srcupdate {} => commands::run_srcupdate(),
     }

@@ -37,7 +37,10 @@ pub enum Commands
         #[arg(long)]
         comments: bool,
     }, 
-    Checkmake {},
+    Checkmake {
+        #[arg(long = "cpp")]
+        cpp_mode: bool,
+    },
     Renamebonus {},
     Srcupdate {},
 }

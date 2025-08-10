@@ -1,8 +1,7 @@
 use std::process::Command;
 use std::env;
 
-pub fn execute_script(interpretor: &str, path: &str)
-{
+pub fn execute_script(interpretor: &str, path: &str) {
     let status = Command::new(interpretor)
         .arg(&path)
         .status();
@@ -15,16 +14,14 @@ pub fn execute_script(interpretor: &str, path: &str)
     }
 }
 
-pub fn run_srcupdate()
-{
+pub fn run_srcupdate() {
     let home = env::var("HOME").expect("HOME variable not set");
     let script_path = format!("{}/.local/scripts/42cpp-project-starter/scripts/src_updater.sh", home);
 
     execute_script("bash", &script_path);
 }
 
-pub fn run_gen(cpp_mode: bool)
-{
+pub fn run_gen(cpp_mode: bool) {
     let home = env::var("HOME").expect("HOME variable not set");
     let script_path = if cpp_mode {
         format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py --cpp", home)
@@ -35,8 +32,7 @@ pub fn run_gen(cpp_mode: bool)
     execute_script("python", &script_path);
 }
 
-pub fn run_test(minishell: bool, pushswap: bool, cub3d: bool)
-{
+pub fn run_test(minishell: bool, pushswap: bool, cub3d: bool) {
     //args en plus ? : recipes ?
     if minishell {
         let home = env::var("HOME").expect("HOME variable not set");
@@ -70,12 +66,13 @@ pub fn run_metrics(lines: bool, fcts: bool, comments: bool) {
     }
 }
 
-pub fn run_checkmake()
-{
-    println!("About to check the Makefile");
-
+pub fn run_checkmake(cpp_mode: bool) {
     let home = env::var("HOME").expect("HOME variable not set");
-    let script_path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
+    let script_path = if cpp_mode {
+        format!("{}/.local/scripts/CanIPush42/CanIPush42.sh --cpp", home)
+    } else {
+        format!("{}/.local/scripts/CanIPush42/CanIPush42.sh --cpp", home)
+    };
 
     execute_script("bash", &script_path);
 }
