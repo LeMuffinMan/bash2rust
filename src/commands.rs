@@ -21,14 +21,17 @@ pub fn run_srcupdate() {
     execute_script("bash", &script_path);
 }
 
-pub fn run_gen(cpp_mode: bool) {
+pub fn run_gen(cpp_mode: bool, clean: bool) {
     let home = env::var("HOME").expect("HOME variable not set");
     let script_path = if cpp_mode {
         format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py --cpp", home)
-    } else {
+    } else if !clean {
         format!("{}/.local/scripts/42cpp-project-starter/project-starter/run.py", home)
+    } else {
+        let path = format!("{}/.local/scripts/42cpp-project-starter/scripts/clean.sh", home);
+        execute_script("bash", &path);
+        return ;
     };
-
     execute_script("python", &script_path);
 }
 
@@ -51,30 +54,25 @@ pub fn run_test(minishell: bool, pushswap: bool, cub3d: bool) {
     }
 }
 
-pub fn run_metrics(lines: bool, fcts: bool, comments: bool) {
-    if lines {
-        println!("About to count lines in project");
-    }
-    if fcts {
-        println!("About to count functions in project");
-    }
-    if comments {
-        println!("About to count comments in project");
-    }
-    if !lines && !fcts && !comments {
-        println!("Metrics available : lines, functions, comments")
-    }
-}
-
 pub fn run_checkmake(cpp_mode: bool) {
     let home = env::var("HOME").expect("HOME variable not set");
-    let script_path = if cpp_mode {
-        format!("{}/.local/scripts/CanIPush42/CanIPush42.sh --cpp", home)
+    if cpp_mode {
+        let path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
+        let status = Command::new("bash")
+            .arg(&path)
+            .arg("--cpp")
+            .status();
+
+        match status {
+            Ok(s) if s.success() => println!("Script executed successfully"),
+            Ok(s) => eprintln!("Script executed but failed with status: {}", s),
+            Err(e) => eprintln!("Failed to execute script: {}", e),
+        }
     } else {
-        format!("{}/.local/scripts/CanIPush42/CanIPush42.sh --cpp", home)
+        let path = format!("{}/.local/scripts/CanIPush42/CanIPush42.sh", home);
+        execute_script("bash", &path);
     };
 
-    execute_script("bash", &script_path);
 }
 
 pub fn run_renamebonus() {
